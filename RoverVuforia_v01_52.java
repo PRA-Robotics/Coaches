@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaRelicRecovery;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaRoverRuckus;
 import org.firstinspires.ftc.robotcore.external.tfod.TfodRoverRuckus;
 
-@TeleOp(name = "RoverVuforia_v01_52 (Blocks to Java)", group = "")
-public class RoverVuforia_v01_52 extends LinearOpMode {
+@TeleOp(name = "RoverVuforia_V01_52 (Blocks to Java)", group = "")
+public class RoverVuforia_V01_52 extends LinearOpMode {
 
   private VuforiaRoverRuckus vuforiaRoverRuckus;
   private AndroidTextToSpeech androidTextToSpeech;
@@ -124,6 +124,8 @@ public class RoverVuforia_v01_52 extends LinearOpMode {
     zDriveString += "  Stime:  " + JavaUtil.formatNumber(zTimeToDriveToDepot, 2);
     zDriveString += " Spos:  " + JavaUtil.formatNumber(zDrvPos, 0);
     zDriveString += "  Slen:" + JavaUtil.formatNumber(zTargLen, 0);
+    zDriveString += "  WCir:" + JavaUtil.formatNumber(WheelCircumference, 0);
+    zDriveString += "  RobotRotationDistance:" + JavaUtil.formatNumber(RobotRotationDistance, 0);
   }
 
   /**
@@ -269,14 +271,14 @@ public class RoverVuforia_v01_52 extends LinearOpMode {
     telemetry.update();
     if (zTargRot >= 0) {
       // If positive rotation angle
-      rightMotor.setTargetPosition(rightMotor.getCurrentPosition() - Math.round(zRotPosition));
-      leftMotor.setTargetPosition(leftMotor.getCurrentPosition() + zRotPosition);
-      zTargPos = leftMotor.getCurrentPosition() + zRotPosition;
+      rightMotor.setTargetPosition(rightMotor.getCurrentPosition() - (int) zRotPosition);
+      leftMotor.setTargetPosition(leftMotor.getCurrentPosition() + (int) zRotPosition);
+      zTargPos = leftMotor.getCurrentPosition() + (int) zRotPosition;
     } else {
       // Negative rotation angle
-      rightMotor.setTargetPosition(rightMotor.getCurrentPosition() + zRotPosition);
-      leftMotor.setTargetPosition(leftMotor.getCurrentPosition() - zRotPosition);
-      zTargPos = leftMotor.getCurrentPosition() - zRotPosition;
+      rightMotor.setTargetPosition(rightMotor.getCurrentPosition() + (int) zRotPosition);
+      leftMotor.setTargetPosition(leftMotor.getCurrentPosition() - (int) zRotPosition);
+      zTargPos = leftMotor.getCurrentPosition() - (int) zRotPosition;
     }
     while (rightMotor.isBusy()) {
       // The Y axis of a joystick ranges from -1 in its topmost position
@@ -372,7 +374,7 @@ public class RoverVuforia_v01_52 extends LinearOpMode {
       } else {
         // Target not there, set x,y, rot to what they should be, if we were in front of target
         avgX = BlueWallX;
-        avgY = BlueWallX;
+        avgY = BlueWallY;
         avgRotZ = 0;
         TrackableName = "Blue";
       }
@@ -396,6 +398,7 @@ public class RoverVuforia_v01_52 extends LinearOpMode {
     zDrvPos = MotorCntsPerShaftRotation * (zTourLen / WheelCircumference);
     zTargRot = zTourRotation;
     TurnToTarget();
+    sleep(3000);
     telemetry.addData("@", zTourString);
     androidTextToSpeech.speak("Rotate");
     sleep(3000);
@@ -474,11 +477,11 @@ public class RoverVuforia_v01_52 extends LinearOpMode {
     ZObjIdx = 0;
     if (ZObjCount > 0) {
       // TODO: Enter the type for variable named recognition
-      for (UNKNOWN_TYPE recognition : recognitions) {
+      /* for (UNKNOWN_TYPE recognition : recognitions) {
         ZObjIdx = ZObjIdx + 1;
         ZObjString += " Obj #: " + JavaUtil.formatNumber(ZObjIdx, 0);
         ZObjString += " " + recognition.getLabel();
-      }
+      }*/
     }
     androidTextToSpeech.speak(ZObjString);
   }
@@ -507,7 +510,7 @@ public class RoverVuforia_v01_52 extends LinearOpMode {
     RedDepotX = DistWalltoOrigin - 25.4 * (23.5 / 2);
     RedDepotY = -Math.abs(RedDepotX);
     // Tour Len Adjustment Factor is multiplied times length of travel for tour only
-    zTourLenAdjFactor = 0.5;
+    zTourLenAdjFactor = 1.0;
     // Establish target tour postions
     FrontWallX = -(DistWalltoOrigin - 25.4 * 23.5);
     FrontWallY = 0;
@@ -532,7 +535,7 @@ public class RoverVuforia_v01_52 extends LinearOpMode {
     // Robot Rotation Distance based on Wheel Spacing (diameter of robot circle)
     WheelSpacing = 12.25 * 25.4;
     // Rotation Adjustment Factor = % of rotation desicei/% of rotation attained, it is the shortfall on a rotation
-    RotAdjFactor = (90 / 85) * (90 / 91);
+    RotAdjFactor = 1.047188; //in blocks code? it was (90 / 85) * (90 / 91);
     // Robot Rotation Distance= Pi*WheelSpacing(diameter of robot circle)
     RobotRotationDistance = WheelSpacing * Math.PI * RotAdjFactor;
     // According to NeveRest 20 spec 537.6 counts per shaft rotation
@@ -570,9 +573,9 @@ public class RoverVuforia_v01_52 extends LinearOpMode {
   private void DriveToTarget() {
     FormatDrvrString();
     telemetry.addData("#: ", zDriveString);
-    rightMotor.setTargetPosition(rightMotor.getCurrentPosition() - zDrvPos);
-    leftMotor.setTargetPosition(leftMotor.getCurrentPosition() - zDrvPos);
-    zTargPos = leftMotor.getCurrentPosition() + zDrvPos;
+    rightMotor.setTargetPosition(rightMotor.getCurrentPosition() - (int) zDrvPos);
+    leftMotor.setTargetPosition(leftMotor.getCurrentPosition() - (int) zDrvPos);
+    zTargPos = leftMotor.getCurrentPosition() + (int) zDrvPos;
     androidTextToSpeech.speak("Driivng");
     while (rightMotor.isBusy()) {
       // The Y axis of a joystick ranges from -1 in its topmost position
@@ -615,7 +618,7 @@ public class RoverVuforia_v01_52 extends LinearOpMode {
     vuforiaRoverRuckus.initialize("", VuforiaLocalizer.CameraDirection.BACK,
         false, false, VuforiaLocalizer.Parameters.CameraMonitorFeedback.AXES,
         0, 0, 0, 0, 0, 0, true);
-    tfodRoverRuckus.initialize(vuforiaRoverRuckus, 0.4, true, true);
+    tfodRoverRuckus.initialize(vuforiaRoverRuckus, 4, true, true);
     // Prompt user to push start button.
     zloopcnt = 0;
     androidTextToSpeech.initialize();
@@ -642,21 +645,28 @@ public class RoverVuforia_v01_52 extends LinearOpMode {
         zloopcnt = zloopcnt + 1;
         telemetry.addData("Loop:", zloopcnt);
         // Turns robot (deg) & drives length (mm), 1 time
+        /*if (zloopcnt==1)  {
+
+            TurnTest(180); // turn negative 45 degrees
+            sleep(1000);
+          // DrvTest(457); // straight drive 457mm=~1.5feet
+
+        } */
+
+
         // Get the tracking results.
         if (RedWall() || BlueWall() || FrontWall() || BackWall()) {
           // Tarrget visible, calculate position, turn and drive to Depot
           TrackableName = vuMarkResult.name;
           Calc_Display();
+          sleep(1000);
           zTourString = "";
           zDriveString = "";
           // If at a target wall, do wall tour from there Counter Clockwise
           if (RedWall()) {
             DriveToBackWall();
-            sleep(1000);
             DriveToBlueWall();
-            sleep(1000);
             DriveToFrontWall();
-            sleep(1000);
             DriveToRedWall();
           } else if (BackWall()) {
             DriveToBlueWall();
