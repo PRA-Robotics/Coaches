@@ -167,30 +167,28 @@ public class RoverVuforia_V02_01 extends LinearOpMode {
 
     Calc_vector_to_Wall_Target(BackWallX, BackWallY);
     TargetTourWall();
+    Initialize_vars();
     if (BackWall()) {
       TrackableName = vuMarkResult.name;
       Calc_Display();
       FoundWall=1;
     } else { //Target not visible
-      // Try up to 360 deg turns to wall to see if target visible
-      while (TurnDeg<360 && FoundWall==0) {
-        TurnDeg=TurnDeg+45;
-        TurnTest(-45);
-        if (BackWall()) {
-          //Target visible
-          TrackableName = vuMarkResult.name;
-          Calc_Display();
-          FoundWall=1;
-        } // end if
-      } // end while loop
+      // Try 1 45 turns to wall to see if target visible
+
+      TurnDeg=TurnDeg+45;
+      TurnTest(-45);
+      if (BackWall()) {
+        //Target visible
+        TrackableName = vuMarkResult.name;
+        Calc_Display();
+        FoundWall=1;
+      } // end if
+
       if (FoundWall==0){
         // Target not there, set x,y, rot to what they should be, if we were in front of target
         avgX = BackWallX;
         avgY = BackWallY;
         avgRotZ = -90;
-        sumX = 0;
-        sumY = 0;
-        sumRotZ = 0;
         TrackableName = "Back";
       }//end if
     } //end else
@@ -259,30 +257,27 @@ public class RoverVuforia_V02_01 extends LinearOpMode {
 
   Calc_vector_to_Wall_Target(FrontWallX, FrontWallY);
   TargetTourWall();
+  Initialize_vars();
   if (FrontWall()) {
     TrackableName = vuMarkResult.name;
     Calc_Display();
     FoundWall=1;
   } else { //Target not visible
-    // Try up to 360 deg turns to wall to see if target visible
-    while (TurnDeg<360 && FoundWall==0) {
-      TurnDeg=TurnDeg+45;
-      TurnTest(-45);
-      if (FrontWall()) {
-        //Target visible
-        TrackableName = vuMarkResult.name;
-        Calc_Display();
-        FoundWall=1;
-        }
-    } // end while loop
+    // Try up 1 45 degree turn towards wall
+
+    TurnDeg=TurnDeg+45;
+    TurnTest(-45);
+    if (FrontWall()) {
+      //Target visible
+      TrackableName = vuMarkResult.name;
+      Calc_Display();
+      FoundWall=1;
+    }
     if (FoundWall==0){
       // Target not there, set x,y, rot to what they should be, if we were in front of target
       avgX = FrontWallX;
       avgY = FrontWallY;
       avgRotZ = 90;
-      sumX = 0;
-      sumY = 0;
-      sumRotZ = 0;
       TrackableName = "Front";
     }
   } //end else
@@ -339,30 +334,28 @@ public class RoverVuforia_V02_01 extends LinearOpMode {
 
     Calc_vector_to_Wall_Target(RedWallX, RedWallY);
     TargetTourWall();
+    Initialize_vars();
     if (RedWall()) {
       TrackableName = vuMarkResult.name;
       Calc_Display();
       FoundWall=1;
     } else { //Target not visible
-      // Try up to 360 deg turns to wall to see if target visible
-      while (TurnDeg<360 && FoundWall==0) {
-        TurnDeg=TurnDeg+45;
-        TurnTest(-45);
-        if (RedWall()) {
-          //Target visible
-          TrackableName = vuMarkResult.name;
-          Calc_Display();
-          FoundWall=1;
-        }
-      } // end while loop
+      // Try 1 45 deg turns to wall to see iwhile (TurnDeg<360 && FoundWall==0) {
+
+      TurnDeg=TurnDeg+45;
+      TurnTest(-45);
+      if (RedWall()) {
+        //Target visible
+        TrackableName = vuMarkResult.name;
+        Calc_Display();
+        FoundWall=1;
+      }
+
       if (FoundWall==0){
         // Target not there, set x,y, rot to what they should be, if we were in front of target
         avgX = RedWallX;
         avgY = RedWallY;
         avgRotZ = 180;
-        sumX = 0;
-        sumY = 0;
-        sumRotZ = 0;
         TrackableName = "Red";
       }
     } //end else
@@ -408,30 +401,28 @@ public class RoverVuforia_V02_01 extends LinearOpMode {
 
     Calc_vector_to_Wall_Target(BlueWallX, BlueWallY);
     TargetTourWall();
+    Initialize_vars();
     if (BlueWall()) {
       TrackableName = vuMarkResult.name;
       Calc_Display();
       FoundWall=1;
     } else { //Target not visible
-      // Try up to 360 deg turns to wall to see if target visible
-      while (TurnDeg<360 && FoundWall==0) {
-        TurnDeg=TurnDeg+45;
-        TurnTest(-45);
-        if (BlueWall()) {
-          //Target visible
-          TrackableName = vuMarkResult.name;
-          Calc_Display();
-          FoundWall=1;
-        }
-      } // end while loop
+      // Try 1 45 deg turns to wall to see if target visible
+
+      TurnDeg=TurnDeg+45;
+      TurnTest(-45);
+      if (BlueWall()) {
+        //Target visible
+        TrackableName = vuMarkResult.name;
+        Calc_Display();
+        FoundWall=1;
+      }
+
       if (FoundWall==0){
         // Target not there, set x,y, rot to what they should be, if we were in front of target
         avgX = BlueWallX;
         avgY = BlueWallY;
         avgRotZ = 0;
-        sumX = 0;
-        sumY = 0;
-        sumRotZ = 0;
         TrackableName = "Red";
       }
     } //end else
